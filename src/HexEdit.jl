@@ -2,7 +2,8 @@ module HexEdit
 
 export HexEd,
        dump!,
-       edit!
+       edit!,
+       find!
 
 type HexEd # :)
     _filesize::Int
@@ -15,30 +16,13 @@ type HexEd # :)
     # constructor/initializer for HexEd type
     ############################################################
 
-    function HexEd(filename::ASCIIString)
-        self = new()
-        self._filesize  = filesize(filename)
-        self._fh        = open(filename, "r+")
-        self._offset    = 0
-        self
+    function HexEd(filename)
+        _filesize  = filesize(filename)
+        _fh        = open(filename, "r+")
+        _offset    = 0x00
+        new(_filesize, _fh, _offset)
     end # constructor HexEd
 end # type HexEd
-
-############################################################
-# _open_fh
-# --------
-# open file in specified mode
-############################################################
-
-function _open_fh(filename::ASCIIString, mode::ASCIIString)
-    fh::IO
-    try
-        fh = open(filename, mode)
-    catch
-        error("file failed to open")
-    end
-    fh
-end # function _open_fh
 
 ############################################################
 # _dump_line
@@ -46,13 +30,11 @@ end # function _open_fh
 # displays data in hex format
 ############################################################
 
-function _dump_line(self::HexEd, line::Array{Uint8})
+function _dump_line(s::HexEd, line::Array{Uint8})
     llen = length(line)
     plen = llen % 16
 
-    # print offset
-    print("$(hex(self._offset, 8)) ")
-    # print hex
+    print("$(hex(s._offset, 8)) ")
     n::Int = 0
     for byte::Uint8 = line
         # space every 4 bytes
@@ -84,8 +66,8 @@ function _dump_line(self::HexEd, line::Array{Uint8})
         n = n + 1
     end
     print("\n")
-    self._offset = self._offset + llen
-end
+    s._offset = s._offset + llen
+end # function _dump_line
 
 ############################################################
 # _dump_buffer
@@ -94,7 +76,7 @@ end
 # by tasking helper _dump_line
 ############################################################
 
-function _dump_buffer(self::HexEd, buffer::Array{Uint8})
+function _dump_buffer(s::HexEd, buffer::Array{Uint8})
     blen::Int  = length(buffer)
     llen::Int  = 16
     idx::Int   = 1
@@ -102,7 +84,7 @@ function _dump_buffer(self::HexEd, buffer::Array{Uint8})
         if idx+ 16 > blen
             llen = blen - idx+ 1
         end
-        _dump_line(self, buffer[idx:idx+ llen - 1])
+        _dump_line(s, buffer[idx:idx+ llen - 1])
         idx= idx+ llen
     end
 end # function _dump_buffer
@@ -113,33 +95,26 @@ end # function _dump_buffer
 # display data chunk of n size beginning at offset
 ############################################################
 
-function dump!(self::HexEd, offset = 0, n::Int = -1)
-    # if size of bytes to dump is unspecified, set number of bytes to filesize
-    if n < 0
-        n = self._filesize
+function dump!(s::HexEd, start = nothing, n = nothing)
+    if n == nothing
+        n = s._filesize
     end
 
-    # set offset index
-    self._offset = convert(Uint64, offset)
+    if start != nothing
+        s._offset = convert(Uint64, start)
+    end
+    seek(s._fh, s._offset)
 
-    # jump to entry offset
-    seek(self._fh, self._offset)
-
-    # read chunk by chunk
     read_size::Int = 1024
     idx::Int       = 0
     total::Int     = 0
     while total < n
-        # set read_size to size of last chunk
         if idx + 1024 > n
             read_size = n - idx
         end
 
-        # read bytes
-        buffer = readbytes(self._fh, read_size)
-        _dump_buffer(self, buffer)
-
-        # increment total
+        buffer = readbytes(s._fh, read_size)
+        _dump_buffer(s, buffer)
         total = total + read_size
     end
 end # function dump!
@@ -152,11 +127,9 @@ end # function dump!
 ############################################################
 
 function _hex2bin(rawstr::String)
-    # return if ASCII
     if (!ismatch(r"^0x[0-9a-fA-F]+", rawstr))
         return convert(Array{Uint8}, rawstr)
     end
-    # remove 0x
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
     len::Int = length(m.captures[1])
     if len % 2 != 0
@@ -171,17 +144,61 @@ end # function _hex2bin
 # edit binary file
 ############################################################
 
-function edit!(self::HexEd, datastr::String, offset = 0)
-    self._offset = convert(Uint64, offset)
-    # if rawdata is a hex string, convert to binary
+function edit!(s::HexEd, datastr::String, start = nothing)
+    if start != nothing
+        s._offset = convert(Uint64, start)
+    end
+
     databytes::Array{Uint8} = _hex2bin(datastr)
-    if offset + length(databytes) > self._filesize
+    if s._offset + length(databytes) > s._filesize
         error("cannot write past end of file")
     end
-    # jump to entry offset
-    seek(self._fh, self._offset)
-    # modify the file
-    write(self._fh, databytes)
+    seek(s._fh, s._offset)
+    write(s._fh, databytes)
 end # function edit!
+
+############################################################
+# find!
+# -----
+# search for binary signature and return the offset or
+# nothing; modify s._offset to point to beginning of
+# located signature
+############################################################
+
+function find!(s::HexEd, sigstr::String, start = nothing)
+    if start != nothing
+        s._offset = convert(Uint64, start)
+    end
+    sigbytes::Array{Uint8} = _hex2bin(sigstr)
+    seek(s._fh, s._offset)
+    siglen::Int = length(sigbytes)
+    if siglen > s._filesize
+        error("signature length exceeds file size")
+    end
+
+    # read to siglen
+    total::Int = 0
+    buffer = readbytes(s._fh, siglen)
+    if buffer == sigbytes
+        return s._offset = convert(Uint64, total - siglen)
+    end
+    total = total + siglen
+    
+    # read byte by byte
+    idx::Int = 0
+    while total < s._filesize
+        if idx + siglen > s._filesize
+             break
+        end
+        byte   = readbytes(s._fh, 1)
+        total = total + 1
+        buffer = append!(buffer[2:end], byte)
+        if buffer == sigbytes
+            return s._offset = convert(Uint64, total - siglen)
+        end
+    end
+
+    nothing
+end # function find!
 
 end # module HexEdit
