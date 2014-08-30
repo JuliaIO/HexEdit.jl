@@ -12,3 +12,13 @@ dump!(hexedit, 4, 16)
 edit!(hexedit, "foobar", 0x04)
 # dump 16 bytes beginning at offset 0x04
 dump!(hexedit, 0x04, 16)
+# find foobar
+fbl = find!(hexedit, "foobar", 0x00)
+if fbl != nothing
+    println("found foobar at $(hex(fbl, 8)) ")
+end
+# find hex signature
+fbl = find!(hexedit, "0x07ae0971")
+if fbl != nothing
+    println("found hex signature at $(hex(fbl, 8))")
+end

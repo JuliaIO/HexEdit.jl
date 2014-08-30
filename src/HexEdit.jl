@@ -35,8 +35,8 @@ function _dump_line(s::HexEd, line::Array{Uint8})
     plen = llen % 16
 
     print("$(hex(s._offset, 8)) ")
-    n::Int = 0
-    for byte::Uint8 = line
+    n = 0
+    for byte = line
         # space every 4 bytes
         if n % 4 == 0
             print("  ")
@@ -57,7 +57,7 @@ function _dump_line(s::HexEd, line::Array{Uint8})
     print("  ")
     # print ascii
     n = 0
-    for byte::Uint8 = line
+    for byte = line
         if byte < 32 || byte > 126
             print(".")
         else
@@ -77,9 +77,9 @@ end # function _dump_line
 ############################################################
 
 function _dump_buffer(s::HexEd, buffer::Array{Uint8})
-    blen::Int  = length(buffer)
-    llen::Int  = 16
-    idx::Int   = 1
+    blen = length(buffer)
+    llen = 16
+    idx  = 1
     while idx< blen
         if idx+ 16 > blen
             llen = blen - idx+ 1
@@ -105,9 +105,9 @@ function dump!(s::HexEd, start = nothing, n = nothing)
     end
     seek(s._fh, s._offset)
 
-    read_size::Int = 1024
-    idx::Int       = 0
-    total::Int     = 0
+    read_size = 1024
+    idx   = 0
+    total = 0
     while total < n
         if idx + 1024 > n
             read_size = n - idx
@@ -131,7 +131,7 @@ function _hex2bin(rawstr::String)
         return convert(Array{Uint8}, rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
-    len::Int = length(m.captures[1])
+    len = length(m.captures[1])
     if len % 2 != 0
         error("hex string length must be divisible by 2")
     end
@@ -149,7 +149,7 @@ function edit!(s::HexEd, datastr::String, start = nothing)
         s._offset = convert(Uint64, start)
     end
 
-    databytes::Array{Uint8} = _hex2bin(datastr)
+    databytes = _hex2bin(datastr)
     if s._offset + length(databytes) > s._filesize
         error("cannot write past end of file")
     end
@@ -169,15 +169,15 @@ function find!(s::HexEd, sigstr::String, start = nothing)
     if start != nothing
         s._offset = convert(Uint64, start)
     end
-    sigbytes::Array{Uint8} = _hex2bin(sigstr)
+    sigbytes = _hex2bin(sigstr)
     seek(s._fh, s._offset)
-    siglen::Int = length(sigbytes)
+    siglen = length(sigbytes)
     if siglen > s._filesize
         error("signature length exceeds file size")
     end
 
     # read to siglen
-    total::Int = 0
+    total = 0
     buffer = readbytes(s._fh, siglen)
     if buffer == sigbytes
         return s._offset = convert(Uint64, total - siglen)
@@ -185,7 +185,7 @@ function find!(s::HexEd, sigstr::String, start = nothing)
     total = total + siglen
     
     # read byte by byte
-    idx::Int = 0
+    idx = 0
     while total < s._filesize
         if idx + siglen > s._filesize
              break
