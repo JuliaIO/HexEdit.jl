@@ -60,7 +60,7 @@ hexedit = HexEd("test.bin")
 edit!(hexedit, "0x666f6f626172", 0x04)
 ```
 
-###Hexadecmial Editing (ASCII string)
+###Hexadecimal Editing (ASCII string)
 
 Write foobar to test.bin beginning at offset 0x04
 ```julia
