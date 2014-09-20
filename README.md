@@ -67,3 +67,11 @@ Write foobar to test.bin beginning at offset 0x04
 hexedit = HexEd("test.bin")
 edit!(hexedit, "foobar", 0x04)
 ```
+
+###Binary Singature Location
+
+Return offset of the start of the hexadecimal signature "b77e"
+```julia
+hexedit = HexEd("test.bin")
+offset = find!(hexedit, "0xb77e")
+```
