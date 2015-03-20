@@ -25,12 +25,12 @@ type HexEd # :)
 end # type HexEd
 
 ############################################################
-# _dump_line
+# dump_line
 # ------------
 # displays data in hex format
 ############################################################
 
-function _dump_line(s::HexEd, line::Array{Uint8})
+function dump_line(s::HexEd, line::Array{Uint8})
     llen = length(line)
     plen = llen % 16
 
@@ -61,22 +61,22 @@ function _dump_line(s::HexEd, line::Array{Uint8})
         if byte < 32 || byte > 126
             print(".")
         else
-            print(char(byte))
+            print(Char(byte))
         end
         n = n + 1
     end
     print("\n")
     s._offset = s._offset + llen
-end # function _dump_line
+end # function dump_line
 
 ############################################################
-# _dump_buffer
+# dump_buffer
 # ------------
 # helper for dump!; iterates buffer and displays data
-# by tasking helper _dump_line
+# by tasking helper dump_line
 ############################################################
 
-function _dump_buffer(s::HexEd, buffer::Array{Uint8})
+function dump_buffer(s::HexEd, buffer::Array{Uint8})
     blen = length(buffer)
     llen = 16
     idx  = 1
@@ -84,10 +84,10 @@ function _dump_buffer(s::HexEd, buffer::Array{Uint8})
         if idx+ 16 > blen
             llen = blen - idx+ 1
         end
-        _dump_line(s, buffer[idx:idx+ llen - 1])
+        dump_line(s, buffer[idx:idx+ llen - 1])
         idx= idx+ llen
     end
-end # function _dump_buffer
+end # function dump_buffer
 
 ############################################################
 # dump!
@@ -114,19 +114,19 @@ function dump!(s::HexEd, start = nothing, n = nothing)
         end
 
         buffer = readbytes(s._fh, read_size)
-        _dump_buffer(s, buffer)
+        dump_buffer(s, buffer)
         total = total + read_size
     end
 end # function dump!
 
 ############################################################
-# _hex2bin
+# hex2bin
 # --------
 # converts ASCII string or hexadecimal string to binary byte
 # array
 ############################################################
 
-function _hex2bin(rawstr::String)
+function hex2bin(rawstr::String)
     if (!ismatch(r"^0x[0-9a-fA-F]+", rawstr))
         return convert(Array{Uint8}, rawstr)
     end
@@ -136,7 +136,7 @@ function _hex2bin(rawstr::String)
         error("hex string length must be divisible by 2")
     end
     hex2bytes(ascii(m.captures[1]))
-end # function _hex2bin
+end # function hex2bin
 
 ############################################################
 # edit!
@@ -149,7 +149,7 @@ function edit!(s::HexEd, datastr::String, start = nothing)
         s._offset = convert(Uint64, start)
     end
 
-    databytes = _hex2bin(datastr)
+    databytes = hex2bin(datastr)
     if s._offset + length(databytes) > s._filesize
         error("cannot write past end of file")
     end
@@ -169,7 +169,7 @@ function find!(s::HexEd, sigstr::String, start = nothing)
     if start != nothing
         s._offset = convert(Uint64, start)
     end
-    sigbytes = _hex2bin(sigstr)
+    sigbytes = hex2bin(sigstr)
     seek(s._fh, s._offset)
     siglen = length(sigbytes)
     if siglen > s._filesize
