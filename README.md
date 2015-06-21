@@ -1,4 +1,4 @@
-##HexEdit [![Build Status](https://travis-ci.org/bearnado/HexEdit.jl.svg?branch=master)](https://travis-ci.org/bearnado/HexEdit.jl)
+##HexEdit [![Build Status](https://travis-ci.org/brandonkmiller/HexEdit.jl.svg?branch=master)](https://travis-ci.org/brandonkmiller/HexEdit.jl)
 
 HexEdit is a package for editing and displaying data in binary files in
 hexadecimal format.

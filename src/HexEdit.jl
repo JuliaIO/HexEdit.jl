@@ -1,20 +1,12 @@
 module HexEdit
 
-export HexEd,
-       dump!,
-       edit!,
+export HexEd, dump!, edit!,
        find!
 
 type HexEd # :)
     _filesize::Int
     _fh::IO
     _offset::Uint64
-
-    ############################################################
-    # HexEd
-    # -----
-    # constructor/initializer for HexEd type
-    ############################################################
 
     function HexEd(filename)
         _filesize  = filesize(filename)
@@ -24,12 +16,9 @@ type HexEd # :)
     end # constructor HexEd
 end # type HexEd
 
-############################################################
-# dump_line
-# ------------
+#----------
 # displays data in hex format
-############################################################
-
+#----------
 function dump_line(s::HexEd, line::Array{Uint8})
     llen = length(line)
     plen = llen % 16
@@ -69,13 +58,10 @@ function dump_line(s::HexEd, line::Array{Uint8})
     s._offset = s._offset + llen
 end # function dump_line
 
-############################################################
-# dump_buffer
-# ------------
+#----------
 # helper for dump!; iterates buffer and displays data
 # by tasking helper dump_line
-############################################################
-
+#----------
 function dump_buffer(s::HexEd, buffer::Array{Uint8})
     blen = length(buffer)
     llen = 16
@@ -89,12 +75,9 @@ function dump_buffer(s::HexEd, buffer::Array{Uint8})
     end
 end # function dump_buffer
 
-############################################################
-# dump!
-# -----
+#----------
 # display data chunk of n size beginning at offset
-############################################################
-
+#----------
 function dump!(s::HexEd, start = nothing, n = nothing)
     if n == nothing
         n = s._filesize
@@ -119,13 +102,10 @@ function dump!(s::HexEd, start = nothing, n = nothing)
     end
 end # function dump!
 
-############################################################
-# hex2bin
-# --------
+#----------
 # converts ASCII string or hexadecimal string to binary byte
 # array
-############################################################
-
+#----------
 function hex2bin(rawstr::String)
     if (!ismatch(r"^0x[0-9a-fA-F]+", rawstr))
         return convert(Array{Uint8}, rawstr)
@@ -138,12 +118,9 @@ function hex2bin(rawstr::String)
     hex2bytes(ascii(m.captures[1]))
 end # function hex2bin
 
-############################################################
-# edit!
-# -----
+#----------
 # edit binary file
-############################################################
-
+#----------
 function edit!(s::HexEd, datastr::String, start = nothing)
     if start != nothing
         s._offset = convert(Uint64, start)
@@ -157,14 +134,11 @@ function edit!(s::HexEd, datastr::String, start = nothing)
     write(s._fh, databytes)
 end # function edit!
 
-############################################################
-# find!
-# -----
+#----------
 # search for binary signature and return the offset or
 # nothing; modify s._offset to point to beginning of
 # located signature
-############################################################
-
+#----------
 function find!(s::HexEd, sigstr::String, start = nothing)
     if start != nothing
         s._offset = convert(Uint64, start)
