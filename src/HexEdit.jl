@@ -6,7 +6,7 @@ export HexEd, dump!, edit!,
 type HexEd # :)
     _filesize::Int
     _fh::IO
-    _offset::Uint64
+    _offset::UInt64
 
     function HexEd(filename)
         _filesize  = filesize(filename)
@@ -19,7 +19,7 @@ end # type HexEd
 #----------
 # displays data in hex format
 #----------
-function dump_line(s::HexEd, line::Array{Uint8})
+function dump_line(s::HexEd, line::Array{UInt8})
     llen = length(line)
     plen = llen % 16
 
@@ -62,7 +62,7 @@ end # function dump_line
 # helper for dump!; iterates buffer and displays data
 # by tasking helper dump_line
 #----------
-function dump_buffer(s::HexEd, buffer::Array{Uint8})
+function dump_buffer(s::HexEd, buffer::Array{UInt8})
     blen = length(buffer)
     llen = 16
     idx  = 1
@@ -84,7 +84,7 @@ function dump!(s::HexEd, start = nothing, n = nothing)
     end
 
     if start != nothing
-        s._offset = convert(Uint64, start)
+        s._offset = convert(UInt64, start)
     end
     seek(s._fh, s._offset)
 
@@ -106,9 +106,9 @@ end # function dump!
 # converts ASCII string or hexadecimal string to binary byte
 # array
 #----------
-function hex2bin(rawstr::String)
+function hex2bin(rawstr::AbstractString)
     if (!ismatch(r"^0x[0-9a-fA-F]+", rawstr))
-        return convert(Array{Uint8}, rawstr)
+        return convert(Array{UInt8}, rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
     len = length(m.captures[1])
@@ -121,9 +121,9 @@ end # function hex2bin
 #----------
 # edit binary file
 #----------
-function edit!(s::HexEd, datastr::String, start = nothing)
+function edit!(s::HexEd, datastr::AbstractString, start = nothing)
     if start != nothing
-        s._offset = convert(Uint64, start)
+        s._offset = convert(UInt64, start)
     end
 
     databytes = hex2bin(datastr)
@@ -139,9 +139,9 @@ end # function edit!
 # nothing; modify s._offset to point to beginning of
 # located signature
 #----------
-function find!(s::HexEd, sigstr::String, start = nothing)
+function find!(s::HexEd, sigstr::AbstractString, start = nothing)
     if start != nothing
-        s._offset = convert(Uint64, start)
+        s._offset = convert(UInt64, start)
     end
     sigbytes = hex2bin(sigstr)
     seek(s._fh, s._offset)
@@ -154,7 +154,7 @@ function find!(s::HexEd, sigstr::String, start = nothing)
     total = 0
     buffer = readbytes(s._fh, siglen)
     if buffer == sigbytes
-        return s._offset = convert(Uint64, total - siglen)
+        return s._offset = convert(UInt64, total - siglen)
     end
     total = total + siglen
     
@@ -168,7 +168,7 @@ function find!(s::HexEd, sigstr::String, start = nothing)
         total = total + 1
         buffer = append!(buffer[2:end], byte)
         if buffer == sigbytes
-            return s._offset = convert(Uint64, total - siglen)
+            return s._offset = convert(UInt64, total - siglen)
         end
     end
 
