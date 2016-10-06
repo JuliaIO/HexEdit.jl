@@ -96,7 +96,7 @@ function dump!(s::HexEd, start = nothing, n = nothing)
             read_size = n - idx
         end
 
-        buffer = readbytes(s._fh, read_size)
+        buffer = read(s._fh, read_size)
         dump_buffer(s, buffer)
         total = total + read_size
     end
@@ -152,7 +152,7 @@ function find!(s::HexEd, sigstr::AbstractString, start = nothing)
 
     # read to siglen
     total = 0
-    buffer = readbytes(s._fh, siglen)
+    buffer = read(s._fh, siglen)
     if buffer == sigbytes
         return s._offset = convert(UInt64, total - siglen)
     end
@@ -164,7 +164,7 @@ function find!(s::HexEd, sigstr::AbstractString, start = nothing)
         if idx + siglen > s._filesize
              break
         end
-        byte   = readbytes(s._fh, 1)
+        byte   = read(s._fh, 1)
         total = total + 1
         buffer = append!(buffer[2:end], byte)
         if buffer == sigbytes
