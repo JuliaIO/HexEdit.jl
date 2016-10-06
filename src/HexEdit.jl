@@ -1,5 +1,8 @@
 module HexEdit
 
+using Compat
+import Compat.read
+
 export HexEd, dump!, edit!,
        find!
 
