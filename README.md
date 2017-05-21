@@ -1,23 +1,23 @@
-##HexEdit [![Build Status](https://travis-ci.org/furface/HexEdit.jl.svg?branch=master)](https://travis-ci.org/furface/HexEdit.jl)
+## HexEdit [![Build Status](https://travis-ci.org/furface/HexEdit.jl.svg?branch=master)](https://travis-ci.org/furface/HexEdit.jl)
 
 HexEdit is a package for editing and displaying data in binary files in
 hexadecimal format.
 
-###Synopsis
+### Synopsis
 
-####dump!(self::HexEd, offset = 0, n::Int = -1)
+#### dump!(self::HexEd, offset = 0, n::Int = -1)
 Displays binary file data beginning at offset and ending at offset + n.
 - offset defaults to 0
 - n defaults to file size - n.
 
-####edit!(self::HexEd, datastr::String, offset = 0)
+#### edit!(self::HexEd, datastr::String, offset = 0)
 Edits targeted binary file by overwriting data beginning at offset.
 - offset defaults to 0
 - datastr can be in ASCII or hexadecimal format (ie. "foobar" or "0x666f6f626172")
 
-###Examples
+### Examples
 
-###Complete File Hexdump
+### Complete File Hexdump
 
 ```julia
 hexedit = HexEd("test.bin")
@@ -39,7 +39,7 @@ dump!(hexedit, 0x00)
 # 000000d0   b4 8f 2c fa   f2 fa 20 43   fc e5 09 1e   cb 6e ac c4   ..,... C.....n..
 # and so on...
 ```
-###Chunk Hexdump
+### Chunk Hexdump
 
 Dump 16 bytes beginning at offset 0x04
 ```julia
@@ -49,7 +49,7 @@ dump!(hexedit, 0x04, 16)
 # 00000004   66 6f 6f 62   61 72 ff ff   ff 00 7f e1   90 e6 67 83   foobar........g.
 ```
 
-###Hexadecimal Editing (Hex String)
+### Hexadecimal Editing (Hex String)
 
 Write foobar to test.bin beginning at offset 0x04
 ```julia
@@ -57,7 +57,7 @@ hexedit = HexEd("test.bin")
 edit!(hexedit, "0x666f6f626172", 0x04)
 ```
 
-###Hexadecimal Editing (ASCII string)
+### Hexadecimal Editing (ASCII string)
 
 Write foobar to test.bin beginning at offset 0x04
 ```julia
@@ -65,7 +65,7 @@ hexedit = HexEd("test.bin")
 edit!(hexedit, "foobar", 0x04)
 ```
 
-###Binary Singature Location
+### Binary Singature Location
 
 Return offset of the start of the hexadecimal signature "b77e"
 ```julia
