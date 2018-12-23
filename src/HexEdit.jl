@@ -171,7 +171,6 @@ function find!(s::HexEd, sigstr::AbstractString, start = nothing)
         byte = read(s._fh, 1)
         total = total + 1
         buffer = append!(buffer[2:end], byte)
-        println("buffer: ", buffer)
         if buffer == sigbytes
             return s._offset = convert(UInt64, total - siglen)
         end

@@ -3,6 +3,12 @@
 HexEdit is a package for editing and displaying data in binary files in
 hexadecimal format.
 
+In **v0.7+**/**v1.0+**, please type `]` in the REPL to use the package mode, then type this command:
+
+```julia
+pkg> add https://github.com/zsz00/HexEdit.jl.git
+```
+
 ### Synopsis
 
 #### dump!(self::HexEd, offset = 0, n::Int = -1)
