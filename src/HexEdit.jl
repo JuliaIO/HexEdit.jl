@@ -149,7 +149,6 @@ function find!(s::HexEd, sigstr::AbstractString, start = nothing)
     sigbytes = hex2bin(sigstr)
     seek(s._fh, s._offset)
     siglen = length(sigbytes)
-    println("siglen: ", siglen, sigbytes)
     if siglen > s._filesize
         error("signature length exceeds file size")
     end
