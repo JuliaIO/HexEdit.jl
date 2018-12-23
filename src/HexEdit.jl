@@ -1,23 +1,22 @@
 module HexEdit
 
-using Compat
-import Compat.read
+# using Compat
+# import Compat.read
 
-export HexEd, dump!, edit!,
-       find!
+export HexEd, dump!, edit!, find!
 
-type HexEd # :)
+mutable struct HexEd
     _filesize::Int
     _fh::IO
     _offset::UInt64
-
-    function HexEd(filename)
-        _filesize  = filesize(filename)
-        _fh        = open(filename, "r+")
-        _offset    = 0x00
-        new(_filesize, _fh, _offset)
-    end # constructor HexEd
 end # type HexEd
+
+function HexEd(filename)
+    _filesize  = filesize(filename)
+    _fh        = open(filename, "r+")
+    _offset    = 0x00
+    HexEd(_filesize, _fh, _offset)
+end # constructor HexEd
 
 #----------
 # displays data in hex format
@@ -26,14 +25,14 @@ function dump_line(s::HexEd, line::Array{UInt8})
     llen = length(line)
     plen = llen % 16
 
-    print("$(hex(s._offset, 8)) ")
+    print("$(string(s._offset, base = 16, pad = 8))")
     n = 0
     for byte = line
         # space every 4 bytes
         if n % 4 == 0
             print("  ")
         end
-        print("$(hex(byte, 2)) ")
+        print("$(string(byte, base = 16, pad = 2))")
         n = n + 1
     end
     # line up ascii on the last line of dumps
@@ -106,12 +105,11 @@ function dump!(s::HexEd, start = nothing, n = nothing)
 end # function dump!
 
 #----------
-# converts ASCII string or hexadecimal string to binary byte
-# array
+# converts ASCII string or hexadecimal string to binary byte array
 #----------
 function hex2bin(rawstr::AbstractString)
-    if (!ismatch(r"^0x[0-9a-fA-F]+", rawstr))
-        return convert(Array{UInt8}, rawstr)
+    if (match(r"^0x[0-9a-fA-F]+", rawstr)==nothing)  # 如果不是 16进制数的 普通字符串
+        return Array{UInt8}(rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
     len = length(m.captures[1])
@@ -145,10 +143,13 @@ end # function edit!
 function find!(s::HexEd, sigstr::AbstractString, start = nothing)
     if start != nothing
         s._offset = convert(UInt64, start)
+    else
+        s._offset = 0
     end
     sigbytes = hex2bin(sigstr)
     seek(s._fh, s._offset)
     siglen = length(sigbytes)
+    println("siglen: ", siglen, sigbytes)
     if siglen > s._filesize
         error("signature length exceeds file size")
     end
@@ -167,9 +168,10 @@ function find!(s::HexEd, sigstr::AbstractString, start = nothing)
         if idx + siglen > s._filesize
              break
         end
-        byte   = read(s._fh, 1)
+        byte = read(s._fh, 1)
         total = total + 1
         buffer = append!(buffer[2:end], byte)
+        println("buffer: ", buffer)
         if buffer == sigbytes
             return s._offset = convert(UInt64, total - siglen)
         end

@@ -15,10 +15,11 @@ dump!(hexedit, 0x04, 16)
 # find foobar
 fbl = find!(hexedit, "foobar", 0x00)
 if fbl != nothing
-    println("found foobar at $(hex(fbl, 8)) ")
+    println("found foobar at $(string(fbl, base = 16, pad = 8))")
 end
 # find hex signature
 fbl = find!(hexedit, "0x07ae0971")
 if fbl != nothing
-    println("found hex signature at $(hex(fbl, 8))")
+    println("found hex signature at $(string(fbl, base = 16, pad = 8))")
 end
+
