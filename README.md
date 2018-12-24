@@ -50,7 +50,7 @@ Dump 16 bytes beginning at offset 0x04
 hexedit = HexEd("test.bin")
 dump!(hexedit, 0x04, 16)
 
-# 00000004   66 6f 6f 62   61 72 ff ff   ff 00 7f e1   90 e6 67 83   foobar........g.
+00000004 | 66 6F 6F 62 61 72 FF FF   FF 00 7F E1 90 E6 67 83 |foobar        g
 ```
 
 ### Hexadecimal Editing (Hex String)
