@@ -25,14 +25,14 @@ function dump_line(s::HexEd, line::Array{UInt8})
     llen = length(line)
     plen = llen % 16
 
-    print("$(string(s._offset, base=16, pad=8)) |")
+    print("$(uppercase(string(s._offset, base=16, pad=8))) |")
     n = 0
     for byte in line
         # space every 4 bytes
         if n % 4 == 0
             print("  ")
         end
-        print("$(string(byte, base=16, pad=2))")
+        print("$(uppercase(string(byte, base=16, pad=2)))")
         n = n + 1
     end
     # line up ascii on the last line of dumps
@@ -68,6 +68,7 @@ function dump_buffer(s::HexEd, buffer::Array{UInt8})
     blen = length(buffer)
     llen = 16
     idx  = 1
+
     while idx < blen
         if idx + 16 > blen
             llen = blen - idx + 1
