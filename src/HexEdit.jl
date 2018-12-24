@@ -11,7 +11,7 @@ mutable struct HexEd
     _offset::UInt64
 end # type HexEd
 
-function HexEd(filename)
+function HexEd(filename::AbstractString)
     _filesize  = filesize(filename)
     _fh        = open(filename, "r+")
     _offset    = 0x00
@@ -25,14 +25,14 @@ function dump_line(s::HexEd, line::Array{UInt8})
     llen = length(line)
     plen = llen % 16
 
-    print("$(string(s._offset, base = 16, pad = 8))")
+    print("$(string(s._offset, base=16, pad=8))")
     n = 0
     for byte in line
         # space every 4 bytes
         if n % 4 == 0
             print("  ")
         end
-        print("$(string(byte, base = 16, pad = 2))")
+        print("$(string(byte, base=16, pad=2))")
         n = n + 1
     end
     # line up ascii on the last line of dumps
@@ -68,19 +68,19 @@ function dump_buffer(s::HexEd, buffer::Array{UInt8})
     blen = length(buffer)
     llen = 16
     idx  = 1
-    while idx< blen
-        if idx+ 16 > blen
-            llen = blen - idx+ 1
+    while idx < blen
+        if idx + 16 > blen
+            llen = blen - idx + 1
         end
-        dump_line(s, buffer[idx:idx+ llen - 1])
-        idx= idx+ llen
+        dump_line(s, buffer[idx:idx + llen - 1])
+        idx = idx + llen
     end
 end # function dump_buffer
 
 #----------
 # display data chunk of n size beginning at offset
 #----------
-function dump!(s::HexEd, start = nothing, n = nothing)
+function dump!(s::HexEd, start=nothing, n=nothing)
     if n == nothing
         n = s._filesize
     end
@@ -108,7 +108,7 @@ end # function dump!
 # converts ASCII string or hexadecimal string to binary byte array
 #----------
 function hex2bin(rawstr::AbstractString)
-    if (match(r"^0x[0-9a-fA-F]+", rawstr)==nothing)  # 如果不是 16进制数的 普通字符串
+    if (match(r"^0x[0-9a-fA-F]+", rawstr) == nothing)  # 如果不是 16进制数的 普通字符串
         return Array{UInt8}(rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
@@ -122,7 +122,7 @@ end # function hex2bin
 #----------
 # edit binary file
 #----------
-function edit!(s::HexEd, datastr::AbstractString, start = nothing)
+function edit!(s::HexEd, datastr::AbstractString, start=nothing)
     if start != nothing
         s._offset = convert(UInt64, start)
     end
@@ -140,7 +140,7 @@ end # function edit!
 # nothing; modify s._offset to point to beginning of
 # located signature
 #----------
-function find!(s::HexEd, sigstr::AbstractString, start = nothing)
+function find!(s::HexEd, sigstr::AbstractString, start=nothing)
     if start != nothing
         s._offset = convert(UInt64, start)
     else
