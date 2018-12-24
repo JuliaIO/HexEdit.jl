@@ -28,7 +28,8 @@ Edits targeted binary file by overwriting data beginning at offset.
 ```julia
 hexedit = HexEd("test.bin")
 dump!(hexedit, 0x00)
-
+```
+```
 00000000 | 5D 00 00 80 66 6F 6F 62   61 72 FF FF FF 00 7F E1 |]   foobar
 00000010 | 90 E6 67 83 93 40 93 22   A0 1B AB 50 6E A1 93 54 |  g  @ "   Pn  T
 00000020 | 3A 7F FD A3 D9 C0 60 29   AF B6 94 96 3E AA 5C 38 |:     `)    > \8
@@ -49,7 +50,8 @@ Dump 16 bytes beginning at offset 0x04
 ```julia
 hexedit = HexEd("test.bin")
 dump!(hexedit, 0x04, 16)
-
+```
+```
 00000004 | 66 6F 6F 62 61 72 FF FF   FF 00 7F E1 90 E6 67 83 |foobar        g
 ```
 
