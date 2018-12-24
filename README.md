@@ -29,21 +29,21 @@ Edits targeted binary file by overwriting data beginning at offset.
 hexedit = HexEd("test.bin")
 dump!(hexedit, 0x00)
 
-# 00000000   5d 00 00 80   00 ff ff ff   ff ff ff ff   ff 00 7f e1   ]...............
-# 00000010   90 e6 67 83   93 40 93 22   a0 1b ab 50   6e a1 93 54   ..g..@."...Pn..T
-# 00000020   3a 7f fd a3   d9 c0 60 29   af b6 94 96   3e aa 5c 38   :.....`)....>.\8
-# 00000030   1c 05 02 31   7d 74 72 0d   40 3c 22 da   ef fa ca 80   ...1}tr.@<".....
-# 00000040   df f8 e2 7b   cc 65 09 29   64 c3 15 de   e6 39 b7 7e   ...{.e.)d....9.~
-# 00000050   d5 8c aa 91   f0 28 37 e1   5d ad c0 37   74 16 ce c1   .....(7.]..7t...
-# 00000060   75 94 1e ea   dd 64 d6 b5   a1 2e 54 3d   62 4b 72 30   u....d....T=bKr0
-# 00000070   5a 35 b8 5d   42 a2 24 a1   c6 22 6a be   c6 58 07 e5   Z5.]B.$.."j..X..
-# 00000080   4f f1 e3 fc   53 14 70 aa   ae 58 fa e3   d8 c4 3a db   O...S.p..X....:.
-# 00000090   d2 81 cf 99   24 10 4c c1   53 76 98 bc   16 e9 c2 7e   ....$.L.Sv.....~
-# 000000a0   2c 6f 23 d6   f7 32 ab 81   7e 74 fd b6   fe b2 e7 15   ,o#..2..~t......
-# 000000b0   83 7d 45 96   44 a8 d9 cf   b2 b8 ad 37   73 0e 15 ad   .}E.D......7s...
-# 000000c0   2f 55 1c 33   e7 86 4a 3a   71 39 fd 40   4f f8 94 7c   /U.3..J:q9.@O..|
-# 000000d0   b4 8f 2c fa   f2 fa 20 43   fc e5 09 1e   cb 6e ac c4   ..,... C.....n..
-# and so on...
+00000000 |  5d000080  666f6f62  6172ffff  ff007fe1 | ]   foobar
+00000010 |  90e66783  93409322  a01bab50  6ea19354 |   g  @ "   Pn  T
+00000020 |  3a7ffda3  d9c06029  afb69496  3eaa5c38 | :     `)    > \8
+00000030 |  1c050231  7d74720d  403c22da  effaca80 |    1}tr @<"
+00000040 |  dff8e27b  cc650929  64c315de  e639b77e |    { e )d    9 ~
+00000050 |  d58caa91  f02837e1  5dadc037  7416cec1 |      (7 ]  7t
+00000060 |  75941eea  dd64d6b5  a12e543d  624b7230 | u    d   .T=bKr0
+00000070 |  5a35b85d  42a224a1  c6226abe  c65807e5 | Z5 ]B $  "j  X
+00000080 |  4ff1e3fc  531470aa  ae58fae3  d8c43adb | O   S p  X    :
+00000090 |  d281cf99  24104cc1  537698bc  16e9c27e |     $ L Sv     ~
+000000a0 |  2c6f23d6  f732ab81  7e74fdb6  feb2e715 | ,o#  2  ~t
+000000b0 |  837d4596  44a8d9cf  b2b8ad37  730e15ad |  }E D      7s
+000000c0 |  2f551c33  e7864a3a  7139fd40  4ff8947c | /U 3  J:q9 @O  |
+000000d0 |  b48f2cfa  f2fa2043  fce5091e  cb6eacc4 |   ,    C     n
+and so on...
 ```
 ### Chunk Hexdump
 
