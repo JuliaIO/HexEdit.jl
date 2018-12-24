@@ -30,7 +30,7 @@ function dump_line(s::HexEd, line::Array{UInt8})
     for byte in line
         # space every 4 bytes
         if n % 8 == 0
-            print("  ")
+            print(" ")
         end
         print("$(uppercase(string(byte, base=16, pad=2))) ")
         n = n + 1
