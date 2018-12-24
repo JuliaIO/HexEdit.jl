@@ -29,20 +29,18 @@ Edits targeted binary file by overwriting data beginning at offset.
 hexedit = HexEd("test.bin")
 dump!(hexedit, 0x00)
 
-00000000 |  5d000080  666f6f62  6172ffff  ff007fe1 | ]   foobar
-00000010 |  90e66783  93409322  a01bab50  6ea19354 |   g  @ "   Pn  T
-00000020 |  3a7ffda3  d9c06029  afb69496  3eaa5c38 | :     `)    > \8
-00000030 |  1c050231  7d74720d  403c22da  effaca80 |    1}tr @<"
-00000040 |  dff8e27b  cc650929  64c315de  e639b77e |    { e )d    9 ~
-00000050 |  d58caa91  f02837e1  5dadc037  7416cec1 |      (7 ]  7t
-00000060 |  75941eea  dd64d6b5  a12e543d  624b7230 | u    d   .T=bKr0
-00000070 |  5a35b85d  42a224a1  c6226abe  c65807e5 | Z5 ]B $  "j  X
-00000080 |  4ff1e3fc  531470aa  ae58fae3  d8c43adb | O   S p  X    :
-00000090 |  d281cf99  24104cc1  537698bc  16e9c27e |     $ L Sv     ~
-000000a0 |  2c6f23d6  f732ab81  7e74fdb6  feb2e715 | ,o#  2  ~t
-000000b0 |  837d4596  44a8d9cf  b2b8ad37  730e15ad |  }E D      7s
-000000c0 |  2f551c33  e7864a3a  7139fd40  4ff8947c | /U 3  J:q9 @O  |
-000000d0 |  b48f2cfa  f2fa2043  fce5091e  cb6eacc4 |   ,    C     n
+00000000 | 5D 00 00 80 66 6F 6F 62   61 72 FF FF FF 00 7F E1 |]   foobar
+00000010 | 90 E6 67 83 93 40 93 22   A0 1B AB 50 6E A1 93 54 |  g  @ "   Pn  T
+00000020 | 3A 7F FD A3 D9 C0 60 29   AF B6 94 96 3E AA 5C 38 |:     `)    > \8
+00000030 | 1C 05 02 31 7D 74 72 0D   40 3C 22 DA EF FA CA 80 |   1}tr @<"
+00000040 | DF F8 E2 7B CC 65 09 29   64 C3 15 DE E6 39 B7 7E |   { e )d    9 ~
+00000050 | D5 8C AA 91 F0 28 37 E1   5D AD C0 37 74 16 CE C1 |     (7 ]  7t
+00000060 | 75 94 1E EA DD 64 D6 B5   A1 2E 54 3D 62 4B 72 30 |u    d   .T=bKr0
+00000070 | 5A 35 B8 5D 42 A2 24 A1   C6 22 6A BE C6 58 07 E5 |Z5 ]B $  "j  X
+00000080 | 4F F1 E3 FC 53 14 70 AA   AE 58 FA E3 D8 C4 3A DB |O   S p  X    :
+00000090 | D2 81 CF 99 24 10 4C C1   53 76 98 BC 16 E9 C2 7E |    $ L Sv     ~
+000000A0 | 2C 6F 23 D6 F7 32 AB 81   7E 74 FD B6 FE B2 E7 15 |,o#  2  ~t
+000000B0 | 83 7D 45 96 44 A8 D9 CF   B2 B8 AD 37 73 0E 15 AD | }E D      7s
 and so on...
 ```
 ### Chunk Hexdump
