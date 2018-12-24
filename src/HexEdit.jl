@@ -27,7 +27,7 @@ function dump_line(s::HexEd, line::Array{UInt8})
 
     print("$(string(s._offset, base = 16, pad = 8))")
     n = 0
-    for byte = line
+    for byte in line
         # space every 4 bytes
         if n % 4 == 0
             print("  ")
@@ -48,7 +48,7 @@ function dump_line(s::HexEd, line::Array{UInt8})
     print("  ")
     # print ascii
     n = 0
-    for byte = line
+    for byte in line
         if byte < 32 || byte > 126
             print(".")
         else
