@@ -7,21 +7,21 @@ mutable struct HexEd
     _fh::IO
     _offset::UInt64
 
-    # function HexEd(filename::AbstractString)
-    #     _filesize  = filesize(filename)
-    #     _fh        = open(filename, "r+")
-    #     _offset    = 0x00
-    #     # HexEd(_filesize, _fh, _offset)
-    #     new(_filesize, _fh, _offset)
-    # end # constructor HexEd
+    function HexEd(filename::AbstractString)
+        _filesize  = filesize(filename)
+        _fh        = open(filename, "r+")
+        _offset    = 0x00
+        # HexEd(_filesize, _fh, _offset)
+        new(_filesize, _fh, _offset)
+    end # constructor HexEd
 end # type HexEd
 
-function HexEd(filename::AbstractString)
-    _filesize  = filesize(filename)
-    _fh        = open(filename, "r+")
-    _offset    = 0x00
-    HexEd(_filesize, _fh, _offset)
-end # constructor HexEd
+# function HexEd(filename::AbstractString)
+#     _filesize  = filesize(filename)
+#     _fh        = open(filename, "r+")
+#     _offset    = 0x00
+#     HexEd(_filesize, _fh, _offset)
+# end # constructor HexEd
 
 #----------
 # displays data in hex format
