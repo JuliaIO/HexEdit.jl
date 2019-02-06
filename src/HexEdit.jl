@@ -11,17 +11,9 @@ mutable struct HexEd
         _filesize  = filesize(filename)
         _fh        = open(filename, "r+")
         _offset    = 0x00
-        # HexEd(_filesize, _fh, _offset)
         new(_filesize, _fh, _offset)
     end # constructor HexEd
 end # type HexEd
-
-# function HexEd(filename::AbstractString)
-#     _filesize  = filesize(filename)
-#     _fh        = open(filename, "r+")
-#     _offset    = 0x00
-#     HexEd(_filesize, _fh, _offset)
-# end # constructor HexEd
 
 #----------
 # displays data in hex format
@@ -115,7 +107,6 @@ end # function dump!
 #----------
 function hex2bin(rawstr::AbstractString)
     if (match(r"^0x[0-9a-fA-F]+", rawstr) == nothing)  # If it is not a hexadecimal string
-    # if occursin(r"^0x[0-9a-fA-F]+", rawstr)
         return Array{UInt8}(rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)
