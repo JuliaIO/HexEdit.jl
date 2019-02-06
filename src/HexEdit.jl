@@ -28,7 +28,7 @@ function dump_line(s::HexEd, line::Array{UInt8})
     print("$(uppercase(string(s._offset, base=16, pad=8))) | ")
     n = 0
     for byte in line
-        # space every 4 bytes
+        # space every 8 bytes
         if n == 8
             print("  ")
         end
@@ -109,7 +109,8 @@ end # function dump!
 # converts ASCII string or hexadecimal string to binary byte array
 #----------
 function hex2bin(rawstr::AbstractString)
-    if (match(r"^0x[0-9a-fA-F]+", rawstr) == nothing)  # 如果不是 16进制数的 普通字符串
+    # if (match(r"^0x[0-9a-fA-F]+", rawstr) == nothing)  # If it is not a hexadecimal string
+    if occursin(r"^0x[0-9a-fA-F]+", rawstr)
         return Array{UInt8}(rawstr)
     end
     m = match(r"0x([0-9a-fA-F]+)", rawstr)

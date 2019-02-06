@@ -6,7 +6,7 @@ hexadecimal format.
 In **v0.7+**/**v1.0+**, please type `]` in the REPL to use the package mode, then type this command:
 
 ```julia
-pkg> add https://github.com/zsz00/HexEdit.jl.git
+pkg> add https://github.com/JuliaIO/HexEdit.jl.git
 ```
 
 ### Synopsis
