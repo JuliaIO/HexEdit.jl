@@ -3,13 +3,13 @@ module HexEdit
 export HexEd, dump!, edit!, find!
 
 mutable struct HexEd
-    _filesize::Int
     _fh::IO
+    _filesize::Int
     _offset::UInt64
 
     function HexEd(filename::AbstractString)
-        _filesize  = filesize(filename)
         _fh        = open(filename, "r+")
+        _filesize  =  filename[1:4]=="\\\\.\\" ? 0 : filesize(filename)
         _offset    = 0x00
         new(_filesize, _fh, _offset)
     end # constructor HexEd
