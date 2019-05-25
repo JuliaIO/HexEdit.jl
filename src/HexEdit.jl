@@ -10,6 +10,7 @@ mutable struct HexEd
     function HexEd(filename::AbstractString)
         _fh        = open(filename, "r+")
         _filesize  =  filename[1:4]=="\\\\.\\" ? 0 : filesize(filename)
+        println("_filesize:", _filesize)
         _offset    = 0x00
         new(_filesize, _fh, _offset)
     end # constructor HexEd
